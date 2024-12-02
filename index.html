@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Berat Badan Ideal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Kalkulator Berat Badan Ideal</h1>
+    <div class="container">
+        <form id="bmiForm">
+            <input type="text" id="name" placeholder="Masukkan Nama" required>
+            <input type="text" id="birthplace" placeholder="Masukkan Tempat Lahir" required>
+            <input type="date" id="birthdate" required>
+            <input type="number" id="age" placeholder="Masukkan Umur" min="1" required>
+            <input type="number" id="weight" placeholder="Masukkan Berat Badan (kg)" min="1" required>
+            <input type="number" id="height" placeholder="Masukkan Tinggi Badan (cm)" min="1" required>
+            <button type="button" onclick="calculateBMI()">Hitung</button>
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            // Ambil nilai input
+            const name = document.getElementById("name").value.trim();
+            const birthplace = document.getElementById("birthplace").value.trim();
+            const birthdate = document.getElementById("birthdate").value;
+            const age = parseInt(document.getElementById("age").value);
+            const weight = parseFloat(document.getElementById("weight").value);
+            const height = parseFloat(document.getElementById("height").value);
+
+            const result = document.getElementById("result");
+            result.innerHTML = ""; // Reset hasil
+
+            // Validasi input
+            if (!name || !birthplace || !birthdate || isNaN(age) || isNaN(weight) || isNaN(height)) {
+                result.innerHTML = '<p class="error">Mohon isi semua data dengan benar.</p>';
+                return;
+            }
+            if (weight <= 0 || height <= 0) {
+                result.innerHTML = '<p class="error">Berat dan tinggi harus lebih dari 0.</p>';
+                return;
+            }
+
+            // Hitung berat badan ideal
+            const heightInMeters = height / 100;
+            const idealWeight = 22 * (heightInMeters * heightInMeters);
+
+            // Buat pesan hasil
+            let message = `
+                <p>Nama: ${name}</p>
+                <p>Tempat Lahir: ${birthplace}</p>
+                <p>Tanggal Lahir: ${birthdate}</p>
+                <p>Umur: ${age} tahun</p>
+                <p>Berat Badan: ${weight} kg</p>
+                <p>Tinggi Badan: ${height} cm</p>
+                <p><strong>Berat Badan Ideal Anda: ${idealWeight.toFixed(2)} kg</strong></p>
+            `;
+
+            if (weight < idealWeight) {
+                message += `<p style="color: orange;">Anda berada di bawah berat badan ideal.</p>`;
+            } else if (weight > idealWeight) {
+                message += `<p style="color: orange;">Anda berada di atas berat badan ideal.</p>`;
+            } else {
+                message += `<p style="color: green;">Anda memiliki berat badan ideal.</p>`;
+            }
+
+            result.innerHTML = message;
+        }
+    </script>
+</body>
+</html>
